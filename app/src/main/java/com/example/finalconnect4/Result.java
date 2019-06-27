@@ -17,8 +17,8 @@ public class Result extends AppCompatActivity {
         t2 = findViewById(R.id.textView1);
 
         Intent intent = getIntent();
-        int x = intent.getIntExtra(MainActivity.reds,red);
-        int y = intent.getIntExtra(MainActivity.yels,yel);
+       int x = intent.getIntExtra(MainActivity.reds,0);
+        int y = intent.getIntExtra(MainActivity.yels,0);
         t1.setText("Player RED won "+x+" times");
         t2.setText("Player  YELLOW won "+y+" times");
     }

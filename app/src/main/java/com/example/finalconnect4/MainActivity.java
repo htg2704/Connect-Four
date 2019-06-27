@@ -3,8 +3,10 @@ package com.example.finalconnect4;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,18 +17,21 @@ public class MainActivity extends AppCompatActivity {
     ImageView i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15,i16,i17,i18,i19,i20,i21,i22,i23,i24,i25;
     int[][] a= new int[5][5];
     int turn = 1;
-    int playwin,countR=0,countY=0;
+    int playwin=0,countR,countY;
     MyDrawable red = new MyDrawable();
     MyDrawableY yel = new MyDrawableY();
     public static final String reds = "red";
     public static final String yels = "yellow";
     public static final String mypref = "Mypref";
     SharedPreferences s;
+    int c=0,b=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        countR = 0;
+        countY = 0;
         b1 = findViewById(R.id.button1);
         b2 = findViewById(R.id.button2);
         b3 = findViewById(R.id.button3);
@@ -363,8 +368,13 @@ public class MainActivity extends AppCompatActivity {
                 i23.setBackgroundColor(Color.rgb(255,255,255));
                 i24.setBackgroundColor(Color.rgb(255,255,255));
                 i25.setBackgroundColor(Color.rgb(255,255,255));
-
+                a = new int[5][5];
             turn = 1;
+                b1.setEnabled(true);
+                b2.setEnabled(true);
+                b3.setEnabled(true);
+                b4.setEnabled(true);
+                b5.setEnabled(true);
             }
         });
     }
@@ -580,22 +590,40 @@ public class MainActivity extends AppCompatActivity {
         }
         s = getSharedPreferences(mypref,MODE_PRIVATE);
         SharedPreferences.Editor editor = s.edit();
+        editor.putInt(reds,0);
+        editor.putInt(yels,0);
         if(playwin==1){
             countR++;
             editor.putInt(reds,countR);
-            editor.commit();
-        }
+            Log.i("imp","executed");
+            editor.apply();
+            b1.setEnabled(false);
+            b2.setEnabled(false);
+            b3.setEnabled(false);
+            b4.setEnabled(false);
+            b5.setEnabled(false);
+            playwin =0;
+        } else
         if(playwin==2){
             countY++;
             editor.putInt(yels,countY);
-            editor.commit();
+            Log.i("imp","executedY");
+            editor.apply();
+            b1.setEnabled(false);
+            b2.setEnabled(false);
+            b3.setEnabled(false);
+            b4.setEnabled(false);
+            b5.setEnabled(false);
+            playwin=0;
         }
+
+        c += s.getInt(reds,0);
+        b += s.getInt(yels,0);
     }
     public void results(View view){
-        int a,b,x=0,y=0;
-        a = s.getInt(reds,countR);
-        b = s.getInt(yels,countY);
-        x+=a;
+        int x=0,y=0;
+
+        x+= c;
         y+=b;
         Intent intent = new Intent(getApplicationContext(), Result.class);
         intent.putExtra(reds,x);
